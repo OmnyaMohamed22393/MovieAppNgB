@@ -1,0 +1,40 @@
+<div class="wishlist-container">
+  <h2 class="section-title">My Wishlist</h2>
+
+  <div *ngIf="wishlistItems.length === 0" class="text-center my-5">
+    <p class="lead">Your wishlist is empty. Add some movies!</p>
+    <img src="../../../public/imgs/No watch list items.png" alt="Empty Wishlist" class="empty-wishlist-img">
+    <a routerLink="/movies" class="btn btn-warning mt-3">Browse Movies</a>
+  </div>
+
+  <div *ngIf="wishlistItems.length > 0" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="col" *ngFor="let item of wishlistItems">
+      <div class="wishlist-card card h-100 shadow-sm border-0">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <a [routerLink]="['/details', item.id, item.media_type || 'movie']">
+              <img [src]="getMovieImageUrl(item.poster_path!)" class="img-fluid rounded-start" alt="{{ item.title || item.name }}">
+            </a>
+          </div>
+          <div class="col-md-8">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">
+                <a [routerLink]="['/details', item.id, item.media_type || 'movie']" class="text-decoration-none text-dark">
+                  {{ item.title || item.name }}
+                </a>
+              </h5>
+              <p class="card-text text-muted small">{{ (item.release_date || item.first_air_date) | date:'MMM dd,yyyy' }}</p>
+              <p class="card-text">{{ item.overview | slice:0:100 }}...</p>
+              <div class="mt-auto d-flex justify-content-between align-items-center">
+                <button class="btn btn-danger btn-sm" (click)="removeFromWishlist(item)">
+                  <i class="bi bi-trash"></i> Remove
+                </button>
+                <span class="badge bg-dark rounded-pill">{{ item.vote_average?.toFixed(1) }} <i class="bi bi-star-fill text-warning"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

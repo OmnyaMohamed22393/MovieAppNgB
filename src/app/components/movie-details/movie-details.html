@@ -1,0 +1,76 @@
+<div class="movie-details-container">
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border text-warning" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2">Loading details...</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger my-5 text-center" role="alert">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="!loading && !error && details">
+    <div class="backdrop-container mb-4">
+      <img [src]="getBackdropImageUrl(details.backdrop_path)" alt="{{ details.title }} Backdrop"
+        class="img-fluid rounded">
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 text-center">
+        <img [src]="getPosterImageUrl(details.poster_path!)" alt="{{ details.title }}"
+          class="img-fluid rounded shadow-sm poster-img">
+      </div>
+      <div class="col-md-8">
+        <div class="details-content">
+          <h1 class="movie-title">{{ details.title }}</h1>
+          <p class="release-date text-muted">{{ details.release_date | date:'mediumDate' }}</p>
+
+          <button class="btn btn-link p-0 wishlist-btn" (click)="toggleWishlist()">
+            <i class="bi" [ngClass]="{'bi-heart-fill text-warning': isInWishlist, 'bi-heart': !isInWishlist}"></i> {{
+            isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist' }}
+          </button>
+
+          <div class="d-flex align-items-center mb-3">
+            <i class="bi bi-star-fill text-warning me-1"></i>
+            <span class="vote-average me-3">{{ details.vote_average.toFixed(1) }}</span>
+          </div>
+
+          <p class="tagline" *ngIf="details.tagline">{{ details.tagline }}</p>
+          <p class="overview">{{ details.overview }}</p>
+
+          <div class="genres mb-3" *ngIf="details.genres?.length">
+            <span *ngFor="let genre of details.genres" class="badge bg-secondary me-2">{{ genre.name }}</span>
+          </div>
+
+          <div class="details-info mb-3">
+            <p *ngIf="details.runtime"><strong>Duration:</strong> {{ getFormattedRuntime() }}</p>
+            <p *ngIf="details.number_of_seasons"><strong>Seasons:</strong> {{ details.number_of_seasons }}</p>
+            <p *ngIf="details.number_of_episodes"><strong>Episodes:</strong> {{ details.number_of_episodes }}</p>
+          </div>
+
+          <a *ngIf="details.homepage" [href]="details.homepage" target="_blank" class="btn btn-primary mt-3">
+            Visit Official Website <i class="bi bi-box-arrow-up-right ms-2"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="recommendations.length > 0" class="mt-5">
+      <h3 class="section-title">Recommendations</h3>
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        <div class="col" *ngFor="let rec of recommendations">
+          <div class="movie-card card h-100 shadow-sm">
+            <img [src]="getPosterImageUrl(rec.poster_path)" class="card-img-top" alt="{{ rec.title || rec.name }}">
+            <div class="card-body">
+              <h5 class="card-title text-truncate"
+                [routerLink]="['/details', rec.id, rec.media_type || (rec.title ? 'movie' : 'tv')]">
+                {{ rec.title || rec.name }}
+              </h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

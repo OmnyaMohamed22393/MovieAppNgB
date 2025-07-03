@@ -1,0 +1,77 @@
+.wishlist-container {
+  padding: 20px 0;
+
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: var(--movie-app-text-dark);
+    text-align: center;
+  }
+
+  .empty-wishlist-img {
+    max-width: 300px;
+    height: auto;
+    margin-top: 20px;
+    opacity: 0.8;
+  }
+
+  .wishlist-card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+    &:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-img-top-wrapper {
+      position: relative;
+      .img-fluid {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+    }
+
+    .img-fluid {
+      min-height: 200px;
+      object-fit: cover;
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+      cursor: pointer;
+    }
+
+    .card-body {
+      padding: 15px;
+      .card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: var(--movie-app-text-dark);
+        a {
+          color: var(--movie-app-text-dark);
+          text-decoration: none;
+          &:hover {
+            color: var(--movie-app-primary-yellow);
+          }
+        }
+      }
+      .card-text {
+        font-size: 0.9rem;
+        color: var(--movie-app-text-light-grey) !important;
+      }
+      .badge {
+        font-size: 0.9rem;
+        background-color: var(--movie-app-text-dark) !important;
+      }
+      .btn-danger {
+        background-color: #dc3545; 
+        border-color: #dc3545;
+        &:hover {
+          background-color: #c82333;
+          border-color: #bd2130;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,183 @@
+.movie-details-container {
+  padding: 30px 0;
+  color: var(--movie-app-text-dark);
+
+  .backdrop-container {
+    height: 300px;
+    overflow: hidden;
+    position: relative;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.7) 30%, rgba(0, 0, 0, 0.3) 100%);
+    }
+  }
+
+  .poster-img {
+    width: 100%;
+    max-width: 300px;
+    margin-top: -150px;
+    position: relative;
+    z-index: 1;
+    border: 5px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .details-content {
+    padding-top: 20px;
+
+    @media (min-width: 768px) {
+      padding-left: 30px;
+      padding-top: 0;
+    }
+
+    .movie-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+      color: var(--movie-app-text-dark);
+    }
+
+    .release-date {
+      font-size: 0.9rem;
+      color: var(--movie-app-text-light-grey);
+      margin-bottom: 15px;
+    }
+
+    .wishlist-btn {
+      color: var(--movie-app-text-dark);
+      font-weight: 500;
+
+      .bi {
+        font-size: 1.2rem;
+        vertical-align: middle;
+      }
+
+      .bi-heart-fill.text-warning {
+        color: var(--movie-app-primary-yellow) !important;
+      }
+
+      &:hover {
+        text-decoration: underline;
+        color: var(--movie-app-primary-yellow);
+      }
+    }
+
+
+    .vote-average {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--movie-app-text-dark);
+    }
+
+    .tagline {
+      font-style: italic;
+      color: var(--movie-app-text-light-grey);
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
+
+    .overview {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .genres {
+      .badge {
+        background-color: var(--movie-app-text-dark) !important;
+        color: white;
+        padding: 0.5em 0.8em;
+        font-size: 0.9em;
+        border-radius: 5px;
+      }
+    }
+
+    .details-info {
+      p {
+        margin-bottom: 5px;
+        font-size: 0.95rem;
+
+        strong {
+          font-weight: 600;
+        }
+      }
+    }
+
+    .btn-primary {
+      background-color: var(--movie-app-primary-yellow);
+      border-color: var(--movie-app-primary-yellow);
+      color: var(--movie-app-text-dark);
+      font-weight: 600;
+
+      &:hover {
+        background-color: #e5b900;
+        border-color: #e5b900;
+        color: var(--movie-app-text-dark);
+      }
+    }
+  }
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-top: 40px;
+    margin-bottom: 25px;
+    color: var(--movie-app-text-dark);
+    text-align: center;
+  }
+
+  // Styles for recommendation cards (similar to movie-list)
+  .movie-card {
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+
+    .card-img-top {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 10px;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--movie-app-text-dark);
+      cursor: pointer;
+
+      &:hover {
+        color: var(--movie-app-primary-yellow);
+      }
+    }
+  }
+}
+
+.btn-primary {
+  &:hover {
+    background-color: #e5b900 !important;
+    border-color: #e5b900 !important;
+  }
+}

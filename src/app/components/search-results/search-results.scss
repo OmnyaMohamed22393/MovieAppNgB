@@ -1,0 +1,95 @@
+.search-results-container {
+  padding: 20px 0;
+
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: var(--movie-app-text-dark);
+    text-align: center;
+  }
+
+  .movie-card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+    &:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-img-top-wrapper {
+      position: relative;
+
+      .card-img-top {
+        width: 100%;
+        height: auto;
+        display: block;
+        cursor: pointer;
+      }
+
+      .rating-badge {
+        background-color: var(--movie-app-text-dark) !important;
+        color: white !important;
+        font-size: 0.8rem;
+        padding: 0.25rem 0.6rem;
+        border-radius: 50px !important;
+      }
+
+      .wishlist-icon {
+        color: var(--movie-app-text-dark);
+        font-size: 1.5rem;
+        line-height: 1;
+        &:hover {
+          color: var(--movie-app-primary-yellow);
+        }
+        .bi-heart-fill.text-warning {
+          color: var(--movie-app-primary-yellow) !important;
+        }
+      }
+    }
+
+    .card-body {
+      padding: 15px;
+      .card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: var(--movie-app-text-dark);
+
+        a.card-title-link {
+          color: var(--movie-app-text-dark);
+          text-decoration: none;
+          cursor: pointer;
+          &:hover {
+            color: var(--movie-app-primary-yellow);
+          }
+        }
+      }
+      .card-text {
+        font-size: 0.85rem;
+        color: var(--movie-app-text-light-grey) !important;
+      }
+    }
+  }
+}
+
+
+.custom-pagination .page-item .page-link {
+  color: var(--movie-app-text-dark);
+  border-color: #dee2e6;
+  background-color: white;
+
+  &:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 227, 83, 0.25);
+  }
+}
+
+.custom-pagination .page-item.active .page-link {
+  background-color: var(--movie-app-primary-yellow);
+  border-color: var(--movie-app-primary-yellow);
+  color: var(--movie-app-text-dark);
+}
+
+.custom-pagination .page-item.disabled .page-link {
+  color: #6c757d;
+}

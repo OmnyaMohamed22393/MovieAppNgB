@@ -1,0 +1,49 @@
+/* Custom styles for AppComponent */
+.navbar-brand {
+  font-weight: 700;
+  color: var(--movie-app-text-dark);
+}
+
+.nav-link.text-dark {
+  font-weight: 500;
+}
+
+.btn-dark {
+  background-color: var(--movie-app-text-dark);
+  border-color: var(--movie-app-text-dark);
+  color: white;
+  &:hover {
+    // background-color: darken(var(--movie-app-text-dark), 10%);
+    background-color: #1a1e21;
+    // border-color: darken(var(--movie-app-text-dark), 10%);
+    border-color: #1a1e21;
+  }
+}
+
+.btn-outline-dark {
+  color: var(--movie-app-text-dark);
+  border-color: var(--movie-app-text-dark);
+  &:hover {
+    background-color: var(--movie-app-text-dark);
+    color: white;
+  }
+}
+
+.form-control:focus {
+  border-color: var(--movie-app-primary-yellow);
+  box-shadow: 0 0 0 0.25rem rgba(255, 227, 83, 0.25); /* Shadow for focus state */
+}
+
+.badge {
+  font-size: 0.7em;
+  vertical-align: middle;
+}
+
+/* Override Bootstrap dropdown link colors */
+.dropdown-item {
+  color: var(--movie-app-text-dark);
+  &:hover, &:focus {
+    background-color: var(--movie-app-primary-yellow);
+    color: var(--movie-app-text-dark);
+  }
+}
