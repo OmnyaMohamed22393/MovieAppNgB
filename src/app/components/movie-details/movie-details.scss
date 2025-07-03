@@ -181,3 +181,71 @@
     border-color: #e5b900 !important;
   }
 }
+
+.movie-reviews-section {
+  margin-top: 40px;
+  h3.section-title {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #FFE353;
+    padding-bottom: 10px;
+    display: inline-block;
+  }
+  .review-card {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+    .review-author {
+      font-size: 1.1em;
+      margin-bottom: 10px;
+      strong {
+        color: #007bff;
+        font-weight: 600;
+      }
+      span {
+        font-weight: 400;
+      }
+    }
+    .review-content {
+      font-size: 0.95em;
+      line-height: 1.6;
+      color: #555;
+      text-align: justify;
+    }
+    .read-more-link {
+        color: #FFE353;
+        font-weight: 500;
+        text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+  }
+}
+
+.backdrop-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+}
+
+.poster-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 27px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.movie-details-container {
+    padding-top: 20px;
+}

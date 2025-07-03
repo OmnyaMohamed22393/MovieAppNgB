@@ -4,6 +4,7 @@ import { API_KEY, IMAGE_BASE_URL } from '../app.config';
 import { Observable } from 'rxjs';
 import { Movie } from '../models/movie';
 import { map } from 'rxjs/operators';
+import { ReviewsResponse } from '../models/review';
 
 interface TmdbSearchResponse {
   page: number;
@@ -48,9 +49,9 @@ export class ApiService {
     return this.http.get(`${this.BASE_URL}/movie/${movieId}/recommendations`, { params });
   }
 
-  getMovieReviews(movieId: number, language: string = 'en', page: number = 1): Observable<any> {
+  getMovieReviews(movieId: number, language: string = 'en', page: number = 1): Observable<ReviewsResponse> {
     const params = this.getHttpParams(language, page);
-    return this.http.get(`${this.BASE_URL}/movie/${movieId}/reviews`, { params });
+    return this.http.get<ReviewsResponse>(`${this.BASE_URL}/movie/${movieId}/reviews`, { params });
   }
 
   // searchMovies(query: string, page: number = 1, language: string = 'en'): Observable<any> {

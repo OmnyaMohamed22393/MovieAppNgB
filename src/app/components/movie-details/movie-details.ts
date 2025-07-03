@@ -5,8 +5,9 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import { WishlistItem, WishlistService } from '../../services/wishlist.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Review } from '../../models/review';
 
-interface MovieDetail{
+interface MovieDetail {
   id: number;
   title: string;
   // poster_path: string | null;
@@ -35,6 +36,7 @@ export class MovieDetails implements OnInit, OnDestroy {
   mediaType: 'movie' | 'tv' | null = null;
   details: MovieDetail | null = null;
   recommendations: any[] = [];
+  reviews: Review[] = [];
   loading: boolean = true;
   error: string | null = null;
   isInWishlist: boolean = false;
@@ -50,7 +52,7 @@ export class MovieDetails implements OnInit, OnDestroy {
       if (this.movieId && this.mediaType) {
         this.loadDetails();
         this.checkWishlistStatus();
-        this.loadRecommendations();
+        // this.loadRecommendations();
       }
       else {
         this.error = 'Invalid movie or TV show ID/Type.';
@@ -62,6 +64,7 @@ export class MovieDetails implements OnInit, OnDestroy {
   loadDetails(): void {
     this.loading = true;
     this.error = null;
+    this.reviews = [];
 
     let detailsObservable: Observable<any>;
     if (this.mediaType === 'movie') {
@@ -94,6 +97,37 @@ export class MovieDetails implements OnInit, OnDestroy {
           homepage: data.homepage,
         };
         this.loading = false;
+
+        if (this.mediaType === 'movie') {
+          this.apiService.getMovieReviews(this.movieId!).pipe(
+            takeUntil(this.unsubscribe$)
+          ).subscribe({
+            next: (revData) => {
+              if (revData && revData.results) {
+                this.reviews = revData.results;
+              }
+            },
+            error: (err) => console.error('Error fetching reviews:', err)
+          });
+        }
+
+        if (this.mediaType === 'movie') {
+          this.apiService.getMovieRecommendations(this.movieId!).pipe(
+            takeUntil(this.unsubscribe$)
+          ).subscribe({
+            next: (recData: any) => {
+              if (recData && recData.results) {
+                this.recommendations = recData.results.map((recMovie: any) => ({
+                  ...recMovie,
+                  media_type: recMovie.media_type || 'movie',
+                  isInWishlist: this.wishlistService.isInWishlist({ id: recMovie.id, media_type: recMovie.media_type || 'movie' })
+                }));
+              }
+            },
+            error: (err) => console.error('Error fetching recommendations:', err)
+          });
+        }
+
       },
       error: (err) => {
         console.error('Error fetching details:', err);
@@ -150,14 +184,14 @@ export class MovieDetails implements OnInit, OnDestroy {
   }
 
   // Placeholder for loading recommendations (will be implemented later)
-  loadRecommendations(): void {
+  // loadRecommendations(): void {
     // this.apiService.getMovieRecommendations(this.movieId!).pipe(takeUntil(this.unsubscribe$)).subscribe({
     //   next: (response) => {
     //     this.recommendations = response.results.slice(0, 5); // Take first 5 for display
     //   },
     //   error: (err) => console.error('Error fetching recommendations:', err)
     // });
-  }
+  // }
 
   ngOnDestroy(): void {
     this.unsubscribe$.next();

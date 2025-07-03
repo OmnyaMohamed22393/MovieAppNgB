@@ -72,5 +72,28 @@
         </div>
       </div>
     </div>
+
+    <section *ngIf="details" class="movie-reviews-section mt-5">
+      <h3 class="section-title">Reviews ({{ reviews.length }})</h3>
+      <div *ngIf="reviews.length > 0; else noReviews">
+        <div *ngFor="let review of reviews" class="review-card mb-4 p-3">
+          <p class="review-author">
+            <strong>{{ review.author_details.username || review.author }}</strong>
+            <span *ngIf="review.author_details.rating !== null && review.author_details.rating !== undefined">
+              - Rating: {{ review.author_details.rating }}/10
+            </span>
+            <span class="text-muted" style="font-size: 0.8em; margin-left: 10px;">
+              {{ review.created_at | date:'mediumDate' }}
+            </span>
+          </p>
+          <p class="review-content">{{ review.content }}</p>
+          <a *ngIf="review.url" [href]="review.url" target="_blank" class="read-more-link">Read full review</a>
+        </div>
+      </div>
+      <ng-template #noReviews>
+        <p class="text-muted">No reviews available for this movie yet.</p>
+      </ng-template>
+    </section>
+
   </ng-container>
 </div>
