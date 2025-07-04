@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Movie } from '../models/movie';
 import { map } from 'rxjs/operators';
 import { ReviewsResponse } from '../models/review';
+import { LanguageService } from './language.service';
 
 interface TmdbSearchResponse {
   page: number;
@@ -20,11 +21,11 @@ export class ApiService {
 
   private BASE_URL = 'https://api.themoviedb.org/3';
 
+  constructor( private http: HttpClient, @Inject(API_KEY) private apiKey: string, @Inject(IMAGE_BASE_URL) public imageBaseUrl: string, private languageService: LanguageService) { }
 
-  constructor( private http: HttpClient, @Inject(API_KEY) private apiKey: string, @Inject(IMAGE_BASE_URL) public imageBaseUrl: string) { }
-
-  private getHttpParams(language: string = 'en', page?: number, query?: string): HttpParams {
-    let params = new HttpParams().set('api_key', this.apiKey).set('language', language);
+  private getHttpParams(language?: string, page?: number, query?: string): HttpParams {
+    const currentLanguage = language || this.languageService.getLanguage();
+    let params = new HttpParams().set('api_key', this.apiKey).set('language', currentLanguage);
     if (page) {
       params = params.set('page', page.toString());
     }
@@ -34,23 +35,23 @@ export class ApiService {
     return params;
   }
 
-  getNowPlayingMovies(page: number = 1, language: string = 'en'): Observable<any> {
-    const params = this.getHttpParams(language, page);
+  getNowPlayingMovies(page: number = 1): Observable<any> {
+    const params = this.getHttpParams(undefined, page);
     return this.http.get(`${this.BASE_URL}/movie/now_playing`, { params });
   }
 
-  getMovieDetails(movieId: number, language: string = 'en'): Observable<any> {
-    const params = this.getHttpParams(language);
+  getMovieDetails(movieId: number): Observable<any> {
+    const params = this.getHttpParams();
     return this.http.get(`${this.BASE_URL}/movie/${movieId}`, { params });
   }
 
-  getMovieRecommendations(movieId: number, language: string = 'en', page: number = 1): Observable<any> {
-    const params = this.getHttpParams(language, page);
+  getMovieRecommendations(movieId: number, page: number = 1): Observable<any> {
+    const params = this.getHttpParams(undefined, page);
     return this.http.get(`${this.BASE_URL}/movie/${movieId}/recommendations`, { params });
   }
 
-  getMovieReviews(movieId: number, language: string = 'en', page: number = 1): Observable<ReviewsResponse> {
-    const params = this.getHttpParams(language, page);
+  getMovieReviews(movieId: number, page: number = 1): Observable<ReviewsResponse> {
+    const params = this.getHttpParams(undefined, page);
     return this.http.get<ReviewsResponse>(`${this.BASE_URL}/movie/${movieId}/reviews`, { params });
   }
 
@@ -59,8 +60,8 @@ export class ApiService {
   //   return this.http.get(`${this.BASE_URL}/search/movie`, { params });
   // }
 
-  searchMovies(query: string, page: number = 1, language: string = 'en'): Observable<{ movies: Movie[], totalPages: number }> {
-    const params = this.getHttpParams(language, page, query);
+  searchMovies(query: string, page: number = 1): Observable<{ movies: Movie[], totalPages: number }> {
+    const params = this.getHttpParams(undefined, page, query);
     return this.http.get<TmdbSearchResponse>(`${this.BASE_URL}/search/multi`, { params }).pipe(
       map(response => {
         return {
@@ -73,13 +74,13 @@ export class ApiService {
     );
   }
 
-  getPopularTvShows(page: number = 1, language: string = 'en'): Observable<any> {
-    const params = this.getHttpParams(language, page);
+  getPopularTvShows(page: number = 1): Observable<any> {
+    const params = this.getHttpParams(undefined, page);
     return this.http.get(`${this.BASE_URL}/tv/popular`, { params });
   }
 
-  getTvShowDetails(seriesId: number, language: string = 'en'): Observable<any> {
-    const params = this.getHttpParams(language);
+  getTvShowDetails(seriesId: number): Observable<any> {
+    const params = this.getHttpParams();
     return this.http.get(`${this.BASE_URL}/tv/${seriesId}`, { params });
   }
 

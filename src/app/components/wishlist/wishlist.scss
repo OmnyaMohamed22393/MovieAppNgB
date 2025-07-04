@@ -1,12 +1,83 @@
 .wishlist-container {
   padding: 20px 0;
 
-  .section-title {
+  h1 {
     font-size: 2.5rem;
-    font-weight: 600;
-    margin-bottom: 30px;
-    color: var(--movie-app-text-dark);
+    font-weight: 700;
+    margin-bottom: 40px;
+    color: #333;
     text-align: center;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -10px;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background-color: #FFE353;
+      border-radius: 2px;
+    }
+  }
+
+  .no-items-message {
+    i {
+      color: #dee2e6 !important;
+      margin-bottom: 20px;
+      font-size: 8rem !important;
+      display: inline-block;
+      line-height: 1;
+    }
+
+    p {
+      font-size: 1.5em;
+      color: #6c757d;
+      margin-bottom: 25px;
+    }
+
+    .btn-warning {
+      background-color: #FFE353;
+      border-color: #FFE353;
+      color: #333;
+      font-weight: bold;
+      padding: 10px 30px;
+      border-radius: 30px;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: darken(#FFE353, 10%);
+        border-color: darken(#FFE353, 10%);
+      }
+    }
+  }
+
+  .wishlist-card {
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-img-top {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
+    }
+
+    .card-title a {
+      font-weight: 700;
+    }
   }
 
   .empty-wishlist-img {
@@ -20,12 +91,14 @@
     border-radius: 10px;
     overflow: hidden;
     transition: transform 0.2s ease-in-out;
+
     &:hover {
       transform: translateY(-5px);
     }
 
     .card-img-top-wrapper {
       position: relative;
+
       .img-fluid {
         width: 100%;
         height: auto;
@@ -43,30 +116,37 @@
 
     .card-body {
       padding: 15px;
+
       .card-title {
         font-size: 1.2rem;
         font-weight: 600;
         margin-bottom: 5px;
         color: var(--movie-app-text-dark);
+
         a {
           color: var(--movie-app-text-dark);
           text-decoration: none;
+
           &:hover {
             color: var(--movie-app-primary-yellow);
           }
         }
       }
+
       .card-text {
         font-size: 0.9rem;
         color: var(--movie-app-text-light-grey) !important;
       }
+
       .badge {
         font-size: 0.9rem;
         background-color: var(--movie-app-text-dark) !important;
       }
+
       .btn-danger {
-        background-color: #dc3545; 
+        background-color: #dc3545;
         border-color: #dc3545;
+
         &:hover {
           background-color: #c82333;
           border-color: #bd2130;

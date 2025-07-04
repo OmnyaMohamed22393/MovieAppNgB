@@ -5,6 +5,7 @@ import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { WishlistService } from './services/wishlist.service';
 import { count, Subject, takeUntil } from 'rxjs';
+import { LanguageService } from './services/language.service';
 
 @Component({
   selector: 'app-root',
@@ -28,11 +29,15 @@ export class App implements OnInit, OnDestroy {
 
   private unsubscribe$: Subject<void> = new Subject<void>();
 
-  constructor(private wishlistService: WishlistService, private router: Router) { }
+  constructor(private wishlistService: WishlistService, private router: Router, private languageService: LanguageService) { }
 
   ngOnInit(): void {
     this.wishlistService.wishlistCount$.pipe(takeUntil(this.unsubscribe$)).subscribe((count: number) => {
       this.wishlistCount = count;
+    });
+
+    this.languageService.currentLanguage$.pipe(takeUntil(this.unsubscribe$)).subscribe(lang => {
+      this.selectedLanguage = lang;
     });
   }
 
@@ -42,8 +47,8 @@ export class App implements OnInit, OnDestroy {
   }
 
   onLanguageChange(langCode: string) {
-    this.selectedLanguage = langCode;
-    console.log('Language changed to:', this.selectedLanguage);
+    this.languageService.setLanguage(langCode); 
+    console.log('Language changed to:', langCode);
   }
 
   onSearch() {

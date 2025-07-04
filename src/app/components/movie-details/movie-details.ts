@@ -40,6 +40,7 @@ export class MovieDetails implements OnInit, OnDestroy {
   loading: boolean = true;
   error: string | null = null;
   isInWishlist: boolean = false;
+  
 
   private unsubscribe$: Subject<void> = new Subject<void>();
   constructor(private route: ActivatedRoute, private apiService: ApiService, private wishlistService: WishlistService, private sanitizer: DomSanitizer) { }

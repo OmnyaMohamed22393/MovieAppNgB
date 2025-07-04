@@ -1,4 +1,4 @@
-<div class="wishlist-container">
+<!-- <div class="wishlist-container">
   <h2 class="section-title">My Wishlist</h2>
 
   <div *ngIf="wishlistItems.length === 0" class="text-center my-5">
@@ -37,4 +37,51 @@
       </div>
     </div>
   </div>
+</div> -->
+
+<div class="wishlist-container container mt-5">
+  <h1 class="text-center mb-4">Watch list</h1>
+  <ng-container *ngIf="wishlistItems.length === 0">
+    <div class="no-items-message text-center my-5">
+      <!-- <i class="bi bi-heart-slash-fill display-1 text-muted"></i> -->
+      <!-- <i class="bi bi-x-circle-fill display-1 text-muted"></i> -->
+      <!-- <i class="bi bi-heart display-1 text-muted"></i> -->
+      <i class="bi bi-exclamation-circle-fill display-1 text-muted"></i>
+      <p class="h4 mt-3 text-muted">No Movies in watch list</p>
+      <button routerLink="/" class="btn btn-warning mt-4">Back to home</button>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="wishlistItems.length > 0">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <div class="col" *ngFor="let item of wishlistItems">
+        <div class="wishlist-card card h-100 shadow-sm border-0">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <a [routerLink]="['/details', item.id, item.media_type || 'movie']">
+                <img [src]="getMovieImageUrl(item.poster_path!)" class="img-fluid rounded-start" alt="{{ item.title || item.name }}">
+              </a>
+            </div>
+            <div class="col-md-8">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">
+                  <a [routerLink]="['/details', item.id, item.media_type || 'movie']" class="text-decoration-none text-dark">
+                    {{ item.title || item.name }}
+                  </a>
+                </h5>
+                <p class="card-text text-muted small">{{ (item.release_date || item.first_air_date) | date:'MMM dd,yyyy' }}</p>
+                <p class="card-text">{{ item.overview | slice:0:100 }}...</p>
+                <div class="mt-auto d-flex justify-content-between align-items-center">
+                  <button class="btn btn-danger btn-sm" (click)="removeFromWishlist(item)">
+                    <i class="bi bi-trash"></i> Remove
+                  </button>
+                  <span class="badge bg-dark rounded-pill">{{ item.vote_average?.toFixed(1) }} <i class="bi bi-star-fill text-warning"></i></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 </div>
