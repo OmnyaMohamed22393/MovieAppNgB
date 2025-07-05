@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { WishlistService } from './services/wishlist.service';
 import { count, Subject, takeUntil } from 'rxjs';
@@ -9,7 +9,7 @@ import { LanguageService } from './services/language.service';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, RouterOutlet, RouterLink, NgbDropdownModule, FormsModule],
+  imports: [CommonModule, RouterOutlet, RouterLink, NgbDropdownModule, FormsModule, RouterLinkActive],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
@@ -47,7 +47,7 @@ export class App implements OnInit, OnDestroy {
   }
 
   onLanguageChange(langCode: string) {
-    this.languageService.setLanguage(langCode); 
+    this.languageService.setLanguage(langCode);
     console.log('Language changed to:', langCode);
   }
 

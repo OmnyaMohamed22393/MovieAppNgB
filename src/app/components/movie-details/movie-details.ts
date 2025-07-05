@@ -5,7 +5,8 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import { WishlistItem, WishlistService } from '../../services/wishlist.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Review } from '../../models/review';
+import { Review, ReviewsResponse } from '../../models/review';
+import { LanguageService } from '../../services/language.service';
 
 interface MovieDetail {
   id: number;
@@ -40,12 +41,21 @@ export class MovieDetails implements OnInit, OnDestroy {
   loading: boolean = true;
   error: string | null = null;
   isInWishlist: boolean = false;
-  
+  currentLanguage: string = 'en';
 
   private unsubscribe$: Subject<void> = new Subject<void>();
-  constructor(private route: ActivatedRoute, private apiService: ApiService, private wishlistService: WishlistService, private sanitizer: DomSanitizer) { }
+  constructor(private route: ActivatedRoute, private apiService: ApiService, private wishlistService: WishlistService, private sanitizer: DomSanitizer, private languageService: LanguageService) { }
 
   ngOnInit(): void {
+
+    this.languageService.currentLanguage$.pipe(takeUntil(this.unsubscribe$)).subscribe(lang => {
+      this.currentLanguage = lang;
+      if (this.movieId && this.mediaType) {
+        this.loadDetails();
+        this.checkWishlistStatus();
+      }
+    });
+
     this.route.paramMap.pipe(takeUntil(this.unsubscribe$)).subscribe(params => {
       this.movieId = Number(params.get('id'));
       this.mediaType = params.get('type') as 'movie' | 'tv';
@@ -66,13 +76,14 @@ export class MovieDetails implements OnInit, OnDestroy {
     this.loading = true;
     this.error = null;
     this.reviews = [];
+    this.recommendations = [];
 
     let detailsObservable: Observable<any>;
     if (this.mediaType === 'movie') {
-      detailsObservable = this.apiService.getMovieDetails(this.movieId!);
+      detailsObservable = this.apiService.getMovieDetails(this.movieId!); /// !, this.currentLanguage
     }
     else if (this.mediaType == 'tv') {
-      detailsObservable = this.apiService.getTvShowDetails(this.movieId!);
+      detailsObservable = this.apiService.getTvShowDetails(this.movieId!); /// !, this.currentLanguage
     }
     else {
       this.error = 'Unsupported media type.';
@@ -99,35 +110,50 @@ export class MovieDetails implements OnInit, OnDestroy {
         };
         this.loading = false;
 
-        if (this.mediaType === 'movie') {
-          this.apiService.getMovieReviews(this.movieId!).pipe(
-            takeUntil(this.unsubscribe$)
-          ).subscribe({
-            next: (revData) => {
-              if (revData && revData.results) {
-                this.reviews = revData.results;
-              }
-            },
-            error: (err) => console.error('Error fetching reviews:', err)
-          });
-        }
+        let reviewsObservable: Observable<ReviewsResponse>;
 
         if (this.mediaType === 'movie') {
-          this.apiService.getMovieRecommendations(this.movieId!).pipe(
-            takeUntil(this.unsubscribe$)
-          ).subscribe({
-            next: (recData: any) => {
-              if (recData && recData.results) {
-                this.recommendations = recData.results.map((recMovie: any) => ({
-                  ...recMovie,
-                  media_type: recMovie.media_type || 'movie',
-                  isInWishlist: this.wishlistService.isInWishlist({ id: recMovie.id, media_type: recMovie.media_type || 'movie' })
-                }));
-              }
-            },
-            error: (err) => console.error('Error fetching recommendations:', err)
-          });
+          reviewsObservable = this.apiService.getMovieReviews(this.movieId!); /// !, this.currentLanguage
+        } else if (this.mediaType === 'tv') {
+          reviewsObservable = this.apiService.getTvShowReviews(this.movieId!); //// !, this.currentLanguage
+        } else {
+          reviewsObservable = new Observable();
         }
+
+        reviewsObservable.pipe(
+          takeUntil(this.unsubscribe$)
+        ).subscribe({
+          next: (revData) => {
+            if (revData && revData.results) {
+              this.reviews = revData.results;
+            }
+          },
+          error: (err) => console.error('Error fetching reviews:', err)
+        });
+
+        let recommendationsObservable: Observable<any>;
+        if (this.mediaType === 'movie') {
+          recommendationsObservable = this.apiService.getMovieRecommendations(this.movieId!);  /// !, this.currentLanguage
+        } else if (this.mediaType === 'tv') {
+          recommendationsObservable = this.apiService.getTvShowRecommendations(this.movieId!); /// !, this.currentLanguage
+        } else {
+          recommendationsObservable = new Observable();
+        }
+
+        recommendationsObservable.pipe(
+          takeUntil(this.unsubscribe$)
+        ).subscribe({
+          next: (recData: any) => {
+            if (recData && recData.results) {
+              this.recommendations = recData.results.map((recItem: any) => ({ // map لعنصر عام
+                ...recItem,
+                media_type: recItem.media_type || this.mediaType, // استخدام media_type الموجودة في العنصر أو الحالية
+                isInWishlist: this.wishlistService.isInWishlist({ id: recItem.id, media_type: recItem.media_type || this.mediaType })
+              }));
+            }
+          },
+          error: (err) => console.error('Error fetching recommendations:', err)
+        });
 
       },
       error: (err) => {
@@ -136,6 +162,44 @@ export class MovieDetails implements OnInit, OnDestroy {
         this.loading = false;
       }
     });
+
+    //     if (this.mediaType === 'movie') {
+    //       this.apiService.getMovieReviews(this.movieId!).pipe(
+    //         takeUntil(this.unsubscribe$)
+    //       ).subscribe({
+    //         next: (revData) => {
+    //           if (revData && revData.results) {
+    //             this.reviews = revData.results;
+    //           }
+    //         },
+    //         error: (err) => console.error('Error fetching reviews:', err)
+    //       });
+    //     }
+
+    //     if (this.mediaType === 'movie') {
+    //       this.apiService.getMovieRecommendations(this.movieId!).pipe(
+    //         takeUntil(this.unsubscribe$)
+    //       ).subscribe({
+    //         next: (recData: any) => {
+    //           if (recData && recData.results) {
+    //             this.recommendations = recData.results.map((recMovie: any) => ({
+    //               ...recMovie,
+    //               media_type: recMovie.media_type || 'movie',
+    //               isInWishlist: this.wishlistService.isInWishlist({ id: recMovie.id, media_type: recMovie.media_type || 'movie' })
+    //             }));
+    //           }
+    //         },
+    //         error: (err) => console.error('Error fetching recommendations:', err)
+    //       });
+    //     }
+
+    //   },
+    //   error: (err) => {
+    //     console.error('Error fetching details:', err);
+    //     this.error = 'Failed to load details. Please try again later.';
+    //     this.loading = false;
+    //   }
+    // });
   }
 
   checkWishlistStatus(): void {

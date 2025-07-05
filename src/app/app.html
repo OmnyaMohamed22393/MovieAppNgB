@@ -7,8 +7,20 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
+    <!-- <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul> -->
+
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link text-dark" routerLink="/movies" routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact: true}">Movies</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark" routerLink="/tvshows" routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact: true}">TV Shows</a>
+        </li>
       </ul>
 
       <!-- <div class="d-flex me-3">

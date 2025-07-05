@@ -84,6 +84,16 @@ export class ApiService {
     return this.http.get(`${this.BASE_URL}/tv/${seriesId}`, { params });
   }
 
+  getTvShowReviews(seriesId: number): Observable<ReviewsResponse> {
+    const params = this.getHttpParams();
+    return this.http.get<ReviewsResponse>(`${this.BASE_URL}/tv/${seriesId}/reviews`, { params });
+  }
+
+  getTvShowRecommendations(seriesId: number): Observable<any> {
+    const params = this.getHttpParams();
+    return this.http.get(`${this.BASE_URL}/tv/${seriesId}/recommendations`, { params });
+  }
+
   // getFullImageUrl(posterPath: string | null) {
   //   if (!posterPath) {
   //     // return 'assets/placeholder.png';
